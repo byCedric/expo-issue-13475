@@ -30,13 +30,13 @@ jobs:
 
       - name: Use good version
         working-directory: ExpoIssue13475Fix
-        run: >
+        run: |
           mv package.json package-old.json
           jq '.resolutions = { \"@unimodules/react-native-adapter\": \"6.3.2\" }' package-old.json > package.json
 
       - name: Reinstall modules
         working-directory: ExpoIssue13475Fix
-        run: >
+        run: |
           npx rimraf node_modules yarn.lock
           yarn install
       
