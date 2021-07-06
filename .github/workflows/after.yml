@@ -31,7 +31,7 @@ jobs:
       - name: Reinstall modules
         working-directory: ExpoIssue13475Fix
         run: >
-          rm -rf node_modules yarn.lock
+          npx rimraf node_modules yarn.lock
           yarn install
       
       - name: Validate good version
