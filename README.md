@@ -4,6 +4,13 @@ This repository demonstrates the different behavior on Windows from [issue 13475
 
 > This issue [has been fixed in `@unimodules/react-native-adapter@6.3.2`](https://github.com/expo/expo/pull/13494).
 
+## Steps
+
+- Setup the repository, node (14), and Expo CLI.
+- Create a new bare project using SDK 42
+- Add a resolution to change the library
+- Build a debug APK
+
 ## Tests
 
 The workflows in this repository are executed on different operating systems, using versions:
