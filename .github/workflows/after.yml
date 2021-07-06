@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       os:
-        description: OS to use (windows/macos/linux)
+        description: OS to use (windows/macos/ubuntu)
         required: true
         default: windows
 jobs:
@@ -62,4 +62,3 @@ jobs:
           name: app.apk
           path: |
             ExpoIssue13475Fix/android/app/build/outputs/apk/debug/app-debug.apk
-            ExpoIssue13475Fix/android/app/build/outputs/apk/debug/outut-metadata.json
