@@ -1,0 +1,51 @@
+name: After fix
+on: [workflow_dispatch]
+jobs:
+  after:
+    name: After fix
+    runs-on: windows-latest
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v2
+      
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      
+      - name: Setup Expo
+        uses: expo/expo-github-action@v6
+        with:
+          expo-version: 4.x
+          expo-cache: true
+      
+      - name: Setup Project
+        run: expo init ExpoIssue13475Fix --template expo-template-bare-minimum@42
+
+      - name: Use good version
+        working-directory: ExpoIssue13475Fix
+        run: >
+          mv package.json package-old.json
+          jq '.resolutions = { "@unimodules/react-native-adapter": "6.3.2" }' package-old.json > package.json
+
+      - name: Reinstall modules
+        working-directory: ExpoIssue13475Fix
+        run: >
+          rm -rf node_modules yarn.lock
+          yarn install
+      
+      - name: Validate good version
+        working-directory: ExpoIssue13475Fix
+        run: yarn why @unimodules/react-native-adapter
+
+      - name: Create APK
+        working-directory: ExpoIssue13475Fix/android
+        run: ./gradlew assembleDebug
+
+      - name: Store APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: app.apk
+          path: |
+            ExpoIssue13475Fix/android/app/build/outputs/apk/debug/app-debug.apk
+            ExpoIssue13475Fix/android/app/build/outputs/apk/debug/outut-metadata.json
