@@ -1,9 +1,15 @@
 name: After fix
-on: [workflow_dispatch]
+on:
+  workflow_dispatch:
+    inputs:
+      os:
+        description: OS to use (windows/macos/linux)
+        required: true
+        default: windows
 jobs:
   after:
     name: After fix
-    runs-on: windows-latest
+    runs-on: ${{ github.event.inputs.os }}-latest
     steps:
       - name: Setup repo
         uses: actions/checkout@v2
