@@ -28,11 +28,19 @@ jobs:
       - name: Setup Project
         run: expo init ExpoIssue13475Error --template expo-template-bare-minimum@42
 
-      - name: Use faulty version
-        working-directory: ExpoIssue13475Error
+      - name: Use faulty version on Windows
+        if: github.event.inputs.os == 'windows'
+        working-directory: ExpoIssue13475Fix
         run: |
           mv package.json package-old.json
           jq '.resolutions = { \"@unimodules/react-native-adapter\": \"6.3.1\" }' package-old.json > package.json
+
+      - name: Use faulty version on MacOS/Ubuntu
+        if: github.event.inputs.os != 'windows'
+        working-directory: ExpoIssue13475Fix
+        run: |
+          mv package.json package-old.json
+          jq '.resolutions = { "@unimodules/react-native-adapter": "6.3.1" }' package-old.json > package.json
 
       - name: Reinstall modules
         working-directory: ExpoIssue13475Error
