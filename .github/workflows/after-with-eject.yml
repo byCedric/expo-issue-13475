@@ -30,14 +30,14 @@ jobs:
         
       - name: Use faulty version on Windows
         if: github.event.inputs.os == 'windows'
-        working-directory: ExpoIssue13475Error
+        working-directory: ExpoIssue13475Fix
         run: |
           mv app.json app-old.json
           jq '.expo.android.package = \"com.bycedric.expoissue13475\"' app-old.json > app.json
           
       - name: Use faulty version on MacOS/Ubuntu
         if: github.event.inputs.os != 'windows'
-        working-directory: ExpoIssue13475Error
+        working-directory: ExpoIssue13475Fix
         run: |
           mv app.json app-old.json
           jq '.expo.android.package = "com.bycedric.expoissue13475"' app-old.json > app.json
