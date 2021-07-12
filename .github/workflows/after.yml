@@ -1,15 +1,15 @@
 name: After fix
-on:
-  workflow_dispatch:
-    inputs:
-      os:
-        description: OS to use (windows/macos/ubuntu)
-        required: true
-        default: windows
+on: [workflow_dispatch]
 jobs:
   after:
     name: After fix
-    runs-on: ${{ github.event.inputs.os }}-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
     steps:
       - name: Setup repo
         uses: actions/checkout@v2
@@ -27,30 +27,12 @@ jobs:
       
       - name: Setup Project
         run: expo init ExpoIssue13475Fix --template expo-template-bare-minimum@42
-
-      - name: Use good version on Windows
-        if: github.event.inputs.os == 'windows'
-        working-directory: ExpoIssue13475Fix
-        run: |
-          mv package.json package-old.json
-          jq '.resolutions = { \"@unimodules/react-native-adapter\": \"6.3.2\" }' package-old.json > package.json
-
-      - name: Use good version on MacOS/Ubuntu
-        if: github.event.inputs.os != 'windows'
-        working-directory: ExpoIssue13475Fix
-        run: |
-          mv package.json package-old.json
-          jq '.resolutions = { "@unimodules/react-native-adapter": "6.3.2" }' package-old.json > package.json
-
-      - name: Reinstall modules
-        working-directory: ExpoIssue13475Fix
-        run: |
-          npx rimraf node_modules yarn.lock
-          yarn install
       
       - name: Validate good version
         working-directory: ExpoIssue13475Fix
-        run: yarn why @unimodules/react-native-adapter
+        run: |
+          yarn why @unimodules/react-native-adapter
+          yarn why expo-modules-autolinking
 
       - name: Create APK
         working-directory: ExpoIssue13475Fix/android
