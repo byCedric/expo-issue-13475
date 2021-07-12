@@ -28,19 +28,37 @@ jobs:
       - name: Setup Project
         run: expo init ExpoIssue13475Fix --template expo-template-blank@42
         
-      - name: Use faulty version on Windows
+      - name: Add Android package (Windows)
         if: github.event.inputs.os == 'windows'
         working-directory: ExpoIssue13475Fix
         run: |
           mv app.json app-old.json
           jq '.expo.android.package = \"com.bycedric.expoissue13475\"' app-old.json > app.json
+          npx rimraf app-old.json
           
-      - name: Use faulty version on MacOS/Ubuntu
+      - name: Add iOS bundle (Windows)
+        if: github.event.inputs.os == 'windows'
+        working-directory: ExpoIssue13475Fix
+        run: |
+          mv app.json app-old.json
+          jq '.expo.ios.bundleIdentifier = \"com.bycedric.expoissue13475\"' app-old.json > app.json
+          npx rimraf app-old.json
+          
+      - name: Add android bundle (MacOS/Ubuntu)
         if: github.event.inputs.os != 'windows'
         working-directory: ExpoIssue13475Fix
         run: |
           mv app.json app-old.json
           jq '.expo.android.package = "com.bycedric.expoissue13475"' app-old.json > app.json
+          npx rimraf app-old.json
+          
+      - name: Add iOS bundle (MacOS/Ubuntu)
+        if: github.event.inputs.os != 'windows'
+        working-directory: ExpoIssue13475Fix
+        run: |
+          mv app.json app-old.json
+          jq '.expo.ios.bundleIdentifier = "com.bycedric.expoissue13475"' app-old.json > app.json
+          npx rimraf app-old.json
         
       - name: Eject Project
         working-directory: ExpoIssue13475Fix
